@@ -1,0 +1,4 @@
+/home/faizt/OSProj3/build/CMakeFiles/server.dir
+/home/faizt/OSProj3/build/CMakeFiles/client.dir
+/home/faizt/OSProj3/build/CMakeFiles/edit_cache.dir
+/home/faizt/OSProj3/build/CMakeFiles/rebuild_cache.dir
