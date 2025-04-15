@@ -33,23 +33,15 @@ This project implements a multithreaded web server in C that is capable of handl
 sudo apt update && sudo apt install -y build-essential cmake git
 Clone the starter repository:
 
-bash
-Copy
-Edit
 mkdir ~/cyb3053 && cd ~/cyb3053
 git clone https://github.com/NSchrick-UTulsa/OSProj3.git
 cd OSProj3
 Set up Git remotes:
 
-bash
-Copy
-Edit
 git remote rename origin upstream
 git remote add origin https://github.com/Faizefied393/OS3.git
 Building the Project
-bash
-Copy
-Edit
+
 cd build
 chmod +x build.sh
 ./build.sh
