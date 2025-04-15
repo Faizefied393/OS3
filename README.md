@@ -1,29 +1,95 @@
-#  Project 03 for the University of Tulsa's CYB-3053: Operating Systems Concept course
+# CYB3053 Project 3 - Multithreaded Web Server
 
-## Please review the Project handout for full assignment details.
+## Author
+Faiz Tariq (Faizefied393)  
+University of Tulsa  
+Spring 2025
 
-## Additional Instructions
+---
 
-Use the same environment you used for Project 01 and Project 02 (WSL, a Linux VM, Cygwin, other). We will not be building support for Windows.
+## Project Overview
 
-Ensure that you obtain all files, preferably through a git clone.
+This project implements a multithreaded web server in C that is capable of handling multiple HTTP GET requests concurrently. It includes a thread pool, a bounded buffer, and request scheduling policies. The server serves only static content and includes security against directory traversal attacks.
 
-Similar to Project 02, a CMakeLists.txt file and a build script have been provided for you. In the build directory, execute "./build.sh", without the quotes. If there are issues with building, ensure that you have execution permissions set (chmod +x build.sh)
+### Core Features
 
-## Using the files
+- Fixed-size thread pool for handling requests concurrently
+- Bounded buffer shared between the main thread and worker threads
+- Three request scheduling policies:
+  - First-In-First-Out (FIFO)
+  - Smallest File First (SFF)
+  - Random
+- Protection from directory traversal attacks using `realpath()` and path validation
+- Serves static content (HTML, text, images)
+- All logic implemented in `src/request.c`
 
-### Server
+---
 
-The server must be started before any client can connect to it.
+## Environment Setup (WSL)
 
-The server can be started from the build directory with "./server", without quotes. There should be no return, and it will appear as if your terminal has hung: this is normal behavior.
+1. Install development tools:
 
-To change server defaults, pass "-h" while running the server ("./server -h") to see the list of options. The default port is 10000. 
+```bash
+sudo apt update && sudo apt install -y build-essential cmake git
+Clone the starter repository:
 
-### Client
+bash
+Copy
+Edit
+mkdir ~/cyb3053 && cd ~/cyb3053
+git clone https://github.com/NSchrick-UTulsa/OSProj3.git
+cd OSProj3
+Set up Git remotes:
 
-For initial testing, it is recommended to utilize the client executable that is built with the build script ("./client"). After you work to complete portions of requests.c, you should be able to use any HTTP client (such as a web browser).
+bash
+Copy
+Edit
+git remote rename origin upstream
+git remote add origin https://github.com/Faizefied393/OS3.git
+Building the Project
+bash
+Copy
+Edit
+cd build
+chmod +x build.sh
+./build.sh
+If the build is successful, you will see both the server and client binaries in the build/ directory.
 
-The client requires 3 arguments: the host, the port, and the filepath. The host will be localhost, the port by default should be 10000, and you can use any of the files in the "files" directory (ex: /files/test1.html)
+Running the Server and Client
+Start the Server
+Run one of the following commands in Terminal 1, depending on the desired scheduling policy:
+
+./server -t 4 -b 8 -s 0  # FIFO
+./server -t 4 -b 8 -s 1  # Smallest File First (SFF)
+./server -t 4 -b 8 -s 2  # Random
+Run the Client
+In Terminal 2:
+
+./client localhost 10000 /files/test1.html
+Make sure that the requested file exists in the build/files/ directory.
+
+Creating Test Files
+To add files to serve:
+
+mkdir -p build/files
+echo "Test 1" > build/files/test1.html
+echo "Test 2" > build/files/test2.html
+Repeat as needed to add more test content.
+
+Project Structure
+src/: Source code files
+
+build/: Compiled binaries and files for serving
+
+build.sh: Shell script to configure and build the project using CMake
+
+Security Measures
+Directory traversal is prevented using the following logic in request_handle():
+
+realpath() is used to resolve the full path of the requested file.
+
+getcwd() retrieves the server's working directory.
+
+If the resolved path does not start with the working directory, the request is rejected with a 403 Forbidden response.
 
 
