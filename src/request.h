@@ -11,3 +11,4 @@ extern int num_threads;
 
 void request_handle(int fd);
 void* thread_request_serve_static(void* arg);
+void request_init_workers(int num);
